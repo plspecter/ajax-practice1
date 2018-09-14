@@ -1,8 +1,10 @@
-$(document).ready(); {
+$(document).ready(function () {
     console.log("we work")
 
-    $("button").on("click", function() {
+    $("#button").on("click", function (event) {
         console.log("clicked")
+
+        event.preventDefault();
 
 
 
@@ -18,15 +20,21 @@ $(document).ready(); {
 
             var results = response.data;
 
+            //Going through the various objects in the node
             for (var i = 0; i < results.length; i++) {
-                var gifDiv = $("<div>");
+                //Create a var that holds the results of the image
+                var imageUrl = results[i].images.fixed_height.url;
+                //See the img url in the console!
+                console.log(imageUrl)
 
-                var gifImage = $("<img>");
-
-                gifImage.attr("src", results[i].images.fixed_height.url);
-                
-                gifDiv.append(personImage);
-                $("#gifs-appear").prepend(gifDiv);
+                //Empty image tag
+                var gifDiv = $("<img>");
+                //Go through the console web to see where the image is located
+                gifDiv.attr("src", imageUrl);
+                //If the image doesnt show up
+                gifDiv.attr("alt", "gif img");
+                //calls on the gifs appear id in the html and attaches gifDiv to it
+                $("#gif-appear").append(gifDiv);
 
             }
 
@@ -35,4 +43,4 @@ $(document).ready(); {
 
     });
 
-};
+});

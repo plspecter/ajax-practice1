@@ -2,18 +2,28 @@
 <html lang="en">
 
 <head>
+    <!-- Conntext jquery and the js file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="javascript/app.js"></script>
-    <title>Document</title>
+    <title>Add a person</title>
 </head>
 
 <body>
 
-    <div id="button">
-        <button data-person="goku">
-            Goku
-        </button>
-    </div>
+    <h1>Add A Person!</h1>
+
+    <!-- The buttons that will be made by jquery -->
+    <div id = "people-buttons"></div>
+
+    <!-- Contains the form and text -->
+    <form id ="person-form">
+        <!-- Side text -->
+        <label for="person-input">Add a person</label>
+        <input type="text" id="person-input">
+        <!-- Form -->
+        <input id="add-person" type="submit" value="Add person">
+
+    </form>
 
 
     <div id="gif-appear"></div>

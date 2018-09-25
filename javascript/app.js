@@ -2,7 +2,7 @@ $(document).ready(function () {
     console.log("we work")
 
     //list of buttons to start the page with
-    var people = ["Kokichi Oma", "Miu", "Nagito"];
+    var people = ["Kokichi Oma", "Miu Iruma", "Nagito Komaeda"];
     console.log(people);
 
     //function to add a button to the page
@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     }
 
-    $(document).on("click", "people-buttons", function () {
+    $(document).on("click", "#people-buttons", function () {
         console.log("clicked");
 
         $("people-buttons").empty();
@@ -105,14 +105,14 @@ $(document).ready(function () {
         var newPerson = $("input").eq(0).val();
 
         if (newPerson.length > 2) {
-            person.push(newPerson);
+            people.push(newPerson);
         }
 
-     addButtons(people, "add-person", "people-buttons");
+     addButtons(people, "add-person", "#people-buttons");
 
 
     });
 
-    addButtons(people, "add-person", "people-buttons");
+    addButtons(people, "add-person", "#people-buttons");
 });
 

@@ -2,117 +2,101 @@ $(document).ready(function () {
     console.log("we work")
 
     //list of buttons to start the page with
-    var people = ["Kokichi Oma", "Miu Iruma", "Nagito Komaeda"];
+    var people = ["Miu Iruma", "Kokochi Oma", "Mouse"];
     console.log(people);
 
-    //function to add a button to the page
-    function addButtons(arrayToUse, classToAdd, areaToAddTo) {
-        $(areaToAddTo).empty();
-
-        for (var i = 0; i < arrayToUse.length; i++) {
-
-            var a = $("<button>");
-            a.addClass(classToAdd);
-            a.attr("data-type", arrayToUse[i]);
-            a.text(arrayToUse[i]);
-            $(areaToAddTo).append(a);
-
-        }
-
-    }
-
-    $(document).on("click", "#people-buttons", function () {
-        console.log("clicked");
-
-        $("people-buttons").empty();
-        $("gif-appear").removeClass("active");
-        $(this).addClass("active");
-
+    //When you click the add person button next to the form
+    $("#add-person").on("click", function () {
         event.preventDefault();
 
-        console.log(person);
-        var person = $(this).attr("data-person");
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + person + "&api_key=LADom26qErILrvxvUKoDrk3kmFT6jhiO";
+        //trim the value
+        var personInput = $("#person-input").val().trim();//searching for gif
 
-        //Ajax time
+        //push the people to the page using the value and trimming it
+        people.push(personInput)
+        console.log(people);
+
+        renderbutton();
+    })
+
+
+    function gifSearch() {
+
+        var personChosen = $(this).attr("data-name")
+        console.log(personChosen);
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + personChosen + "&api_key=LADom26qErILrvxvUKoDrk3kmFT6jhiO";
+        console.log(queryURL);
 
         $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function (response) {
 
-            //Looks in the dom for these elements - goes to response and finds web for data
-            var results = response.data;
-            console.log(response);
+            //grabs web of response - then goes into data (dom elements)
+            var results = response.data
+            console.log(results);
 
-            //Going through the various objects in the node
-            for (var i = 0; i < results.length; i++) {
-                //What are those backslashes in yellow?
+
+            //goes through the objects in the dom 
+            for (var i = 0; i < results.length; i++)
+                //still dont know what those backslashes are :)
                 var gifDiv = $("<div class=\"people-item\">");
 
-                var rating = results[i].rating;
+            //animated and still properties - dom findings
+            var animated = results[i].images.fixed_height.url;
+            var still = results[i].images.fixed_height_still.url;
 
-                var p = $("<p>").text("Rating" + rating);
+            //new var to summon and hold the images
+            var imageUrl = results[i].images.fixed_height.url;
 
-                var animated = results[i].images.fixed_height.url;
-                var still = results[i].images.fixed_height_still.url
+            //See the img url in the console!
+            console.log(imageUrl)
 
-                var imageUrl = results[i].images.fixed_height.url;
-                //See the img url in the console!
-                console.log(imageUrl)
+            //Now to create the html tags
 
-                //Empty image tag
-                var gifDiv = $("<img>");
-                //Go through the console web to see where the image is located
-                gifDiv.attr("src", still);
-                //find the still elem in the dom
-                gifDiv.attr("data-still", still)
-                //find the animated elem in the dom 
-                gifDiv.attr("data-animate", animated)
-                //not sure why we keep adding still
-                gifDiv.attr("data-state", "still");
-                gifDiv.addClass("person-image");
-                //If the image doesnt show up
-                gifDiv.attr("alt", "gif img");
-                //Append the rating to the picture
-                gifDiv.append(p);
-                //calls on the gifs appear id in the html and attaches gifDiv to it
-                $("#gif-appear").append(gifDiv);
+            //Empty image tag to dump onto the html
+            var gifDiv = $("<img>");
+            //Go through the console web to see where the image is located
+            gifDiv.attr("src", still);
+            //find the still elem in the dom
+            gifDiv.attr("data-still", still)
+            //find the animated elem in the dom 
+            gifDiv.attr("data-animate", animated)
+            //not sure why we keep adding still
+            gifDiv.attr("data-state", "still");
+            //giving it a class
+            gifDiv.addClass("person-image");
+            //If the image doesnt show up
+            gifDiv.attr("alt", "gif img");
+            //Append the rating to the picture
+            gifDiv.append(p);
 
-            }
+            $(this).text();
+            //calls on the gifs appear id in the html and attaches gifDiv to it
+            $("#gif-appear").append(gifDiv);
+
+
 
         });
+    }
+
+        function renderbutton() {
+            $("#people-buttons").empty();
+
+            for (var i = 0; i < people.length; i++) {
+
+                var a = $("<button>");
+                a.addClass("gifsbtn");
+                a.attr("data-name", people[i]);
+                a.text(people[i]);
+                $("#people-buttons").append(a)
+
+            }
+        }
+        $(document).on("click", ".gifsbtn", gifSearch)
+        renderbutton();
 
     });
 
-    $(document).on("click", "add-person", function () {
-
-        var state = $(this).attr("data-state");
-
-        if (state === "still") {
-            $(this).attr("src", $(this).attr("data-animate"))
-            $(this).attr("data-state", "animate");
-        }
-        else {
-            $(this).attr("src", $(this).attr("data-still"));
-            $(this).attr("data-state", "still");
-        }
-    })
-
-
-    $("#add-person").on("click", function (event) {
-        event.preventDefault();
-        var newPerson = $("input").eq(0).val();
-
-        if (newPerson.length > 2) {
-            people.push(newPerson);
-        }
-
-     addButtons(people, "add-person", "#people-buttons");
-
-
-    });
-
-    addButtons(people, "add-person", "#people-buttons");
-});
+  
 

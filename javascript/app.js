@@ -2,7 +2,7 @@ $(document).ready(function () {
     console.log("we work")
 
     //list of buttons to start the page with
-    var people = ["Miu Iruma", "Kokochi Oma", "Mouse"];
+    var people = ["Sasuke", "Monokuma", "Mouse"];
     console.log(people);
 
     //When you click the add person button next to the form
@@ -38,65 +38,82 @@ $(document).ready(function () {
 
 
             //goes through the objects in the dom 
-            for (var i = 0; i < results.length; i++)
+            for (var i = 0; i < results.length; i++) {
                 //still dont know what those backslashes are :)
                 var gifDiv = $("<div class=\"people-item\">");
 
-            //animated and still properties - dom findings
-            var animated = results[i].images.fixed_height.url;
-            var still = results[i].images.fixed_height_still.url;
+                //animated and still properties - dom findings
+                var animated = results[i].images.fixed_height.url;
+                var still = results[i].images.fixed_height_still.url;
 
-            //new var to summon and hold the images
-            var imageUrl = results[i].images.fixed_height.url;
+                //new var to summon and hold the images
+                var imageUrl = results[i].images.fixed_height.url;
 
-            //See the img url in the console!
-            console.log(imageUrl)
+                //See the img url in the console!
+                console.log(imageUrl)
 
-            //Now to create the html tags
+                //Now to create the html tags
 
-            //Empty image tag to dump onto the html
-            var gifDiv = $("<img>");
-            //Go through the console web to see where the image is located
-            gifDiv.attr("src", still);
-            //find the still elem in the dom
-            gifDiv.attr("data-still", still)
-            //find the animated elem in the dom 
-            gifDiv.attr("data-animate", animated)
-            //not sure why we keep adding still
-            gifDiv.attr("data-state", "still");
-            //giving it a class
-            gifDiv.addClass("person-image");
-            //If the image doesnt show up
-            gifDiv.attr("alt", "gif img");
-            //Append the rating to the picture
-            gifDiv.append(p);
+                //Empty image tag to dump onto the html
+                var gifDiv = $("<img>");
+                //Go through the console web to see where the image is located
+                gifDiv.attr("src", still);
+                //find the still elem in the dom
+                gifDiv.attr("data-still", still)
+                //find the animated elem in the dom 
+                gifDiv.attr("data-animate", animated)
+                //not sure why we keep adding still
+                gifDiv.attr("data-state", "still");
+                //giving it a class
+                gifDiv.addClass("person-image");
+                //If the image doesnt show up
+                gifDiv.attr("alt", "gif img");
+                //Append the rating to the picture
+                // gifDiv.append(p);
 
-            $(this).text();
-            //calls on the gifs appear id in the html and attaches gifDiv to it
-            $("#gif-appear").append(gifDiv);
-
-
-
-        });
-    }
-
-        function renderbutton() {
-            $("#people-buttons").empty();
-
-            for (var i = 0; i < people.length; i++) {
-
-                var a = $("<button>");
-                a.addClass("gifsbtn");
-                a.attr("data-name", people[i]);
-                a.text(people[i]);
-                $("#people-buttons").append(a)
+                $(this).text();
+                //calls on the gifs appear id in the html and attaches gifDiv to it
+                $("#gif-appear").prepend(gifDiv);
 
             }
+
+        });
+
+    }
+
+    $(document).on("click", "person-image", function() {
+
+        var state = $(this).attr("data-state");
+        //if you click it this happens
+        if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate")
         }
-        $(document).on("click", ".gifsbtn", gifSearch)
-        renderbutton();
+        //if you dont click it this happens
+        else {
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
+        }
 
-    });
+    }) 
 
-  
+    function renderbutton() {
+        $("#people-buttons").empty();
+
+        for (var i = 0; i < people.length; i++) {
+
+            var a = $("<button>");
+            a.addClass("gifsbtn");
+            a.attr("data-name", people[i]);
+            a.text(people[i]);
+            $("#people-buttons").append(a)
+
+        }
+    }
+    $(document).on("click", ".gifsbtn", "#people-buttons", gifSearch)
+    renderbutton();
+
+});
+
+
 
